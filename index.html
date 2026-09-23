@@ -3,22 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HYPERCONTEXT // 2M-Token Gemini Intelligence & Context Caching Studio</title>
+<title>HYPERCONTEXT // Gemini 2M Monorepo Archaeologist & Context Caching Gateway</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #04060d;
-  --panel: #080d1a;
+  --bg: #080806;
+  --panel: #0d0f12;
   --panel-border: rgba(255, 255, 255, 0.08);
-  --gemini-blue: #1a73e8;
-  --gemini-cyan: #00f0ff;
-  --gemini-purple: #a142f4;
-  --gemini-pink: #ff2a85;
-  --gemini-green: #00ff9d;
-  --text: #e8ecf4;
-  --text-dim: #7f8ba4;
+  --panel-border-bright: rgba(255, 255, 255, 0.25);
+  --text: #f5f5f5;
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --text-micro: rgba(255, 255, 255, 0.3);
   --f-head: 'Plus Jakarta Sans', -apple-system, sans-serif;
   --f-mono: 'JetBrains Mono', monospace;
 }
@@ -33,13 +30,14 @@ body {
   flex-direction: column;
   overflow: hidden;
   user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* TOP STATUS BAR */
 .header-bar {
-  background: #060914;
+  background: #080806;
   border-bottom: 1px solid var(--panel-border);
-  padding: 12px 24px;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -53,47 +51,39 @@ body {
 .brand-title {
   font-family: var(--f-mono);
   font-weight: 800;
-  font-size: 15px;
-  letter-spacing: 0.08em;
+  font-size: 14px;
+  letter-spacing: 0.1em;
   color: #fff;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 .pulse-sparkle {
-  width: 8px; height: 8px;
-  background: linear-gradient(135deg, var(--gemini-cyan), var(--gemini-purple));
+  width: 6px; height: 6px;
+  background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 0 14px var(--gemini-cyan);
-  animation: pulseGlow 1.8s infinite ease-in-out;
-}
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.25); }
+  opacity: 0.8;
 }
 .badge {
   font-family: var(--f-mono);
   font-size: 9px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.04);
+  padding: 4px 8px;
+  border-radius: 2px;
+  background: transparent;
   border: 1px solid var(--panel-border);
   color: var(--text-dim);
 }
-.badge.gemini {
-  border-color: rgba(161, 66, 244, 0.4);
-  color: #c98bf7;
-  background: rgba(161, 66, 244, 0.06);
+.badge.active {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
 }
-.badge.cyan { border-color: rgba(0,240,255,0.3); color: var(--gemini-cyan); }
-.badge.green { border-color: rgba(0,255,157,0.3); color: var(--gemini-green); }
 
 .stat-pills {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
 }
 .stat-pill {
   text-align: right;
@@ -102,15 +92,15 @@ body {
 .stat-pill .val {
   font-size: 13px;
   font-weight: 700;
-  color: var(--gemini-cyan);
+  color: #ffffff;
   line-height: 1;
 }
 .stat-pill .lbl {
   font-size: 8px;
-  letter-spacing: 0.1em;
-  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  color: var(--text-micro);
   text-transform: uppercase;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 /* MAIN STAGE */
@@ -125,7 +115,7 @@ body {
 /* LEFT: CANVAS VIEWPORT */
 .canvas-wrapper {
   position: relative;
-  background: radial-gradient(circle at 45% 55%, #0d152a 0%, #03050a 100%);
+  background: #080806;
   display: flex;
   flex-direction: column;
 }
@@ -140,12 +130,13 @@ body {
 
 .canvas-hud {
   position: absolute;
-  top: 18px;
-  left: 20px;
+  top: 20px;
+  left: 24px;
   z-index: 5;
   pointer-events: none;
   font-family: var(--f-mono);
   font-size: 10px;
+  letter-spacing: 0.08em;
   color: var(--text-dim);
   display: flex;
   flex-direction: column;
@@ -154,24 +145,25 @@ body {
 .hud-legend {
   position: absolute;
   bottom: 20px;
-  left: 20px;
+  left: 24px;
   z-index: 5;
   display: flex;
-  gap: 12px;
+  gap: 16px;
   font-family: var(--f-mono);
   font-size: 9px;
-  background: rgba(6, 9, 20, 0.85);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(8, 8, 6, 0.9);
   border: 1px solid var(--panel-border);
-  padding: 6px 12px;
-  border-radius: 4px;
-  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 2px;
 }
-.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
 .legend-dot { width: 6px; height: 6px; border-radius: 50%; }
 
 /* RIGHT: AUDIT CONSOLE */
 .console-panel {
-  background: var(--panel);
+  background: #0b0c0e;
   border-left: 1px solid var(--panel-border);
   display: flex;
   flex-direction: column;
@@ -179,17 +171,17 @@ body {
   z-index: 5;
 }
 .console-section {
-  padding: 20px;
+  padding: 24px;
   border-bottom: 1px solid var(--panel-border);
 }
 .section-title {
   font-family: var(--f-mono);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gemini-cyan);
-  margin-bottom: 14px;
+  color: #ffffff;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -197,10 +189,10 @@ body {
 
 /* 2M CONTEXT CAPACITY GAUGE */
 .context-meter-box {
-  background: #04060d;
+  background: #080806;
   border: 1px solid var(--panel-border);
-  border-radius: 4px;
-  padding: 12px;
+  border-radius: 2px;
+  padding: 14px;
   margin-bottom: 16px;
 }
 .meter-top {
@@ -208,22 +200,24 @@ body {
   justify-content: space-between;
   font-family: var(--f-mono);
   font-size: 10px;
-  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  color: var(--text-dim);
 }
 .meter-top span.num { color: #fff; font-weight: 700; }
 .meter-track {
   width: 100%;
-  height: 6px;
+  height: 4px;
   background: rgba(255,255,255,0.06);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 .meter-fill {
   width: 8.5%;
   height: 100%;
-  background: linear-gradient(90deg, var(--gemini-blue), var(--gemini-purple), var(--gemini-cyan));
-  border-radius: 3px;
-  transition: width 0.4s ease;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
 /* CACHE TOGGLE */
@@ -231,32 +225,36 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(26, 115, 232, 0.08);
-  border: 1px solid rgba(26, 115, 232, 0.3);
-  padding: 10px 14px;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--panel-border);
+  padding: 12px 14px;
+  border-radius: 2px;
   margin-bottom: 16px;
 }
 .switch-left {
   font-family: var(--f-mono);
   font-size: 11px;
 }
-.switch-left .title { color: #fff; font-weight: 700; }
-.switch-left .sub { font-size: 9px; color: var(--gemini-green); margin-top: 2px; }
+.switch-left .title { color: #fff; font-weight: 700; letter-spacing: 0.04em; }
+.switch-left .sub { font-size: 9px; color: var(--text-dim); margin-top: 3px; letter-spacing: 0.04em; }
 
 .toggle-btn {
-  background: var(--gemini-cyan);
-  color: #04060d;
+  background: #ffffff;
+  color: #000000;
   font-family: var(--f-mono);
   font-size: 10px;
   font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 3px;
+  letter-spacing: 0.08em;
+  padding: 6px 12px;
+  border-radius: 2px;
   border: none;
   cursor: pointer;
+  transition: opacity 0.2s;
 }
+.toggle-btn:hover { opacity: 0.85; }
 .toggle-btn.off {
-  background: rgba(255,255,255,0.1);
+  background: transparent;
+  border: 1px solid var(--panel-border);
   color: var(--text-dim);
 }
 
@@ -268,35 +266,33 @@ body {
 }
 .query-input {
   flex: 1;
-  background: #04060d;
+  background: #080806;
   border: 1px solid var(--panel-border);
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 10px 14px;
   color: #fff;
   font-family: var(--f-mono);
-  font-size: 12px;
+  font-size: 11px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s;
 }
 .query-input:focus {
-  border-color: var(--gemini-cyan);
-  box-shadow: 0 0 12px rgba(0,240,255,0.25);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .btn-query {
-  background: linear-gradient(135deg, var(--gemini-blue), var(--gemini-purple));
-  color: #fff;
+  background: #ffffff;
+  color: #000000;
   font-family: var(--f-mono);
   font-weight: 800;
   font-size: 11px;
-  letter-spacing: 0.05em;
-  padding: 0 16px;
+  letter-spacing: 0.1em;
+  padding: 0 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
+  transition: opacity 0.2s;
 }
-.btn-query:hover { opacity: 0.9; }
-.btn-query:active { transform: scale(0.98); }
+.btn-query:hover { opacity: 0.85; }
 
 /* PRESET PILLS */
 .preset-list {
@@ -306,54 +302,58 @@ body {
   margin-bottom: 14px;
 }
 .preset-chip {
-  background: rgba(255,255,255,0.03);
+  background: transparent;
   border: 1px solid var(--panel-border);
   color: var(--text-dim);
   font-family: var(--f-mono);
   font-size: 9px;
-  padding: 5px 9px;
-  border-radius: 3px;
+  letter-spacing: 0.06em;
+  padding: 5px 10px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.15s;
 }
 .preset-chip:hover {
-  border-color: var(--gemini-cyan);
+  border-color: rgba(255, 255, 255, 0.35);
   color: #fff;
-  background: rgba(0,240,255,0.06);
 }
 
 /* RESULTS & REASONING */
 .results-wrapper {
   flex: 1;
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
 }
 .reasoning-card {
-  background: #050813;
+  background: #080806;
   border: 1px solid var(--panel-border);
-  border-radius: 4px;
-  padding: 16px;
+  border-radius: 2px;
+  padding: 18px;
   font-size: 12px;
-  line-height: 1.6;
-  color: #ccd6e6;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
 }
 .reasoning-card h3 {
   font-family: var(--f-head);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   color: #fff;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
 }
-.reasoning-card p { margin-bottom: 10px; }
+.reasoning-card p { margin-bottom: 12px; }
 .reasoning-card code {
   font-family: var(--f-mono);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2px 6px;
-  border-radius: 3px;
-  color: var(--gemini-cyan);
+  border-radius: 2px;
+  color: #ffffff;
 }
 .citations-list {
-  margin-top: 14px;
-  padding-top: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid var(--panel-border);
   display: flex;
   flex-wrap: wrap;
@@ -362,28 +362,32 @@ body {
 .citation-pill {
   font-family: var(--f-mono);
   font-size: 9px;
-  color: var(--gemini-purple);
-  background: rgba(161, 66, 244, 0.08);
-  border: 1px solid rgba(161, 66, 244, 0.3);
-  padding: 3px 8px;
-  border-radius: 3px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  padding: 4px 8px;
+  border-radius: 2px;
   cursor: pointer;
+  transition: all 0.15s;
 }
-.citation-pill:hover { background: rgba(161, 66, 244, 0.2); }
+.citation-pill:hover { border-color: rgba(255, 255, 255, 0.4); color: #ffffff; }
 
 /* FOOTER BAR */
 .footer-bar {
-  background: #050813;
+  background: #080806;
   border-top: 1px solid var(--panel-border);
-  padding: 8px 24px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-family: var(--f-mono);
   font-size: 9px;
-  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  color: var(--text-micro);
 }
-.footer-bar a { color: var(--gemini-cyan); text-decoration: none; }
+.footer-bar a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
+.footer-bar a:hover { color: #fff; }
 </style>
 </head>
 <body>
@@ -395,15 +399,15 @@ body {
       <span class="pulse-sparkle"></span>
       HYPERCONTEXT // GEMINI 2M
     </div>
-    <span class="badge gemini">Gemini 2.0 / 1.5 Pro</span>
-    <span class="badge cyan">Context Caching (-75%)</span>
-    <span class="badge green">Blast Radius DAG</span>
+    <span class="badge active">Gemini 2.0 / 1.5 Pro</span>
+    <span class="badge">Context Caching (-75%)</span>
+    <span class="badge">Blast Radius DAG</span>
     <span class="badge">Zero Chunking Loss</span>
   </div>
   <div class="stat-pills">
     <div class="stat-pill">
       <div class="val" id="statTtft">1.15 s</div>
-      <div class="lbl">Time-To-First-Token (TTFT)</div>
+      <div class="lbl">Time-To-First-Token</div>
     </div>
     <div class="stat-pill">
       <div class="val" id="statTokens">142.5k / 2.0M</div>
@@ -427,11 +431,11 @@ body {
     </div>
     <canvas id="monorepoCanvas"></canvas>
     <div class="hud-legend">
-      <div class="legend-item"><span class="legend-dot" style="background:#00f0ff;"></span> Auth &amp; Security</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#ffb800;"></span> Database / Client</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#00ff9d;"></span> API &amp; Controllers</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#ff2a85;"></span> Webhooks / Queue</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#a142f4;"></span> Models &amp; Types</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ffffff;"></span> Auth</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.7);"></span> Database</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.5);"></span> API</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.35);"></span> Queue</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.2);"></span> Models</div>
     </div>
   </div>
 
@@ -441,7 +445,7 @@ body {
     <div class="console-section">
       <div class="section-title">
         <span>Gemini Context Caching</span>
-        <span id="cacheStateBadge" style="color:var(--gemini-green);">CACHE WARM (ACTIVE)</span>
+        <span id="cacheStateBadge" style="color:#ffffff;">CACHE WARM (ACTIVE)</span>
       </div>
 
       <!-- CAPACITY GAUGE -->
@@ -500,14 +504,14 @@ body {
 <script>
 // --- MONOREPO NODE REGISTRY ---
 const NODES = [
-  { id: 'src/db/client.ts', cat: 'db', x: 0, y: 0, r: 12, label: 'dbClient' },
-  { id: 'src/models/user.ts', cat: 'model', x: -140, y: -60, r: 8, label: 'User Model' },
-  { id: 'src/auth/jwt.ts', cat: 'auth', x: -220, y: 40, r: 10, label: 'verifyJwt' },
-  { id: 'src/middleware/auth.ts', cat: 'auth', x: -120, y: 120, r: 9, label: 'authMiddleware' },
-  { id: 'src/routes/api/users.ts', cat: 'api', x: -40, y: 190, r: 8, label: 'usersRouter' },
-  { id: 'src/services/billing.ts', cat: 'model', x: 140, y: -70, r: 10, label: 'BillingService' },
-  { id: 'src/webhooks/stripe.ts', cat: 'webhook', x: 230, y: 30, r: 9, label: 'stripeWebhook' },
-  { id: 'src/routes/internal/sync.ts', cat: 'api', x: 100, y: 130, r: 8, label: 'syncTenant' }
+  { id: 'src/db/client.ts', cat: 'db', x: 0, y: 0, r: 10, label: 'dbClient' },
+  { id: 'src/models/user.ts', cat: 'model', x: -140, y: -60, r: 7, label: 'User Model' },
+  { id: 'src/auth/jwt.ts', cat: 'auth', x: -220, y: 40, r: 9, label: 'verifyJwt' },
+  { id: 'src/middleware/auth.ts', cat: 'auth', x: -120, y: 120, r: 8, label: 'authMiddleware' },
+  { id: 'src/routes/api/users.ts', cat: 'api', x: -40, y: 190, r: 7, label: 'usersRouter' },
+  { id: 'src/services/billing.ts', cat: 'model', x: 140, y: -70, r: 8, label: 'BillingService' },
+  { id: 'src/webhooks/stripe.ts', cat: 'webhook', x: 230, y: 30, r: 8, label: 'stripeWebhook' },
+  { id: 'src/routes/internal/sync.ts', cat: 'api', x: 100, y: 130, r: 7, label: 'syncTenant' }
 ];
 
 const EDGES = [
@@ -521,11 +525,11 @@ const EDGES = [
 ];
 
 const CAT_COLORS = {
-  auth: '#00f0ff',
-  db: '#ffb800',
-  api: '#00ff9d',
-  webhook: '#ff2a85',
-  model: '#a142f4'
+  auth: '#ffffff',
+  db: 'rgba(255, 255, 255, 0.75)',
+  api: 'rgba(255, 255, 255, 0.55)',
+  webhook: 'rgba(255, 255, 255, 0.38)',
+  model: 'rgba(255, 255, 255, 0.22)'
 };
 
 let cacheEnabled = true;
@@ -551,7 +555,7 @@ function draw() {
   const w = canvas.width / window.devicePixelRatio;
   const h = canvas.height / window.devicePixelRatio;
 
-  ctx.fillStyle = '#04060d';
+  ctx.fillStyle = '#080806';
   ctx.fillRect(0, 0, w, h);
 
   const cx = w / 2;
@@ -564,8 +568,8 @@ function draw() {
     if (!n1 || !n2) continue;
 
     const isBlasted = highlightedBlastRadius.has(edge.from) && highlightedBlastRadius.has(edge.to);
-    ctx.lineWidth = isBlasted ? 2.0 : 1.0;
-    ctx.strokeStyle = isBlasted ? '#ff2a85' : 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = isBlasted ? 1.5 : 0.75;
+    ctx.strokeStyle = isBlasted ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.1)';
 
     ctx.beginPath();
     ctx.moveTo(cx + n1.x, cy + n1.y);
@@ -573,14 +577,16 @@ function draw() {
     ctx.stroke();
   }
 
-  // Draw Blast Radius Shockwave
+  // Draw Blast Radius Shockwave (Clean monochrome expansion)
   if (shockwaveCenter && shockwaveRadius < 350) {
-    shockwaveRadius += 4;
+    shockwaveRadius += 3.5;
     ctx.beginPath();
     ctx.arc(cx + shockwaveCenter.x, cy + shockwaveCenter.y, shockwaveRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(255, 42, 133, ${Math.max(0, 1 - shockwaveRadius / 350)})`;
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, 0.6 - shockwaveRadius / 350)})`;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
     ctx.stroke();
+    ctx.setLineDash([]);
   }
 
   // Draw Nodes
@@ -588,25 +594,23 @@ function draw() {
     const screenX = cx + node.x;
     const screenY = cy + node.y;
     const isBlasted = highlightedBlastRadius.has(node.id);
-    const color = isBlasted ? '#ff2a85' : CAT_COLORS[node.cat];
+    const color = isBlasted ? '#ffffff' : CAT_COLORS[node.cat];
 
     ctx.beginPath();
-    ctx.arc(screenX, screenY, isBlasted ? node.r + 3 : node.r, 0, Math.PI * 2);
+    ctx.arc(screenX, screenY, isBlasted ? node.r + 2 : node.r, 0, Math.PI * 2);
     ctx.fillStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = isBlasted ? 20 : 8;
     ctx.fill();
-    ctx.shadowBlur = 0;
 
     // Outer ring
     ctx.beginPath();
-    ctx.arc(screenX, screenY, node.r + 5, 0, Math.PI * 2);
-    ctx.strokeStyle = isBlasted ? 'rgba(255, 42, 133, 0.8)' : 'rgba(255, 255, 255, 0.1)';
+    ctx.arc(screenX, screenY, node.r + 4, 0, Math.PI * 2);
+    ctx.strokeStyle = isBlasted ? '#ffffff' : 'rgba(255, 255, 255, 0.15)';
+    ctx.lineWidth = 1;
     ctx.stroke();
 
     // Label
     ctx.font = '10px JetBrains Mono';
-    ctx.fillStyle = isBlasted ? '#fff' : 'rgba(255, 255, 255, 0.6)';
+    ctx.fillStyle = isBlasted ? '#ffffff' : 'rgba(255, 255, 255, 0.5)';
     ctx.fillText(node.label, screenX + node.r + 8, screenY + 3);
   }
 
@@ -648,15 +652,19 @@ function triggerBlastRadius(targetId) {
   }
 
   const targetNode = NODES.find(n => n.id === targetId);
-  shockwaveCenter = targetNode;
-  shockwaveRadius = 0;
+  if (targetNode) {
+    shockwaveCenter = { x: targetNode.x, y: targetNode.y };
+    shockwaveRadius = targetNode.r;
+  }
 
   document.getElementById('hudStatus').textContent = `BLAST RADIUS TRIGGERED: "${targetId}" MUTATION IMPACTS ${highlightedBlastRadius.size} FILES`;
 }
 
-// --- GEMINI QUERY REASONING DISPATCHER ---
+// --- QUERY & AUDIT SYNTHESIS ---
 function executeQuery() {
   const query = document.getElementById('queryInput').value.trim();
+  if (!query) return;
+
   const q = query.toLowerCase();
 
   const ttft = cacheEnabled ? '1.15 s' : '14.20 s';
@@ -736,14 +744,14 @@ document.getElementById('btnToggleCache').addEventListener('click', () => {
     btn.textContent = 'ENABLED';
     btn.className = 'toggle-btn';
     badge.textContent = 'CACHE WARM (ACTIVE)';
-    badge.style.color = 'var(--gemini-green)';
+    badge.style.color = '#ffffff';
     title.textContent = 'Google Cloud Context Cache: ON';
     sub.textContent = '75% cost discount ($0.0375 / 1M) · 1.1s TTFT';
   } else {
     btn.textContent = 'DISABLED';
     btn.className = 'toggle-btn off';
     badge.textContent = 'UNCACHED COLD DISPATCH';
-    badge.style.color = 'var(--gemini-pink)';
+    badge.style.color = 'rgba(255, 255, 255, 0.4)';
     title.textContent = 'Google Cloud Context Cache: OFF';
     sub.textContent = 'Full standard rate ($0.150 / 1M) · 14.2s latency';
   }
