@@ -1,15 +1,25 @@
-# HYPERCONTEXT // 2,000,000-Token Gemini Monorepo Intelligence & Context Caching Gateway
+# HYPERCONTEXT
+### 2,000,000-Token Gemini Monorepo Intelligence & Context Caching Gateway
 
 <p align="center">
-  <img src="screenshot.png" alt="HYPERCONTEXT Dashboard" width="100%" />
+  <img src="screenshot.png" alt="HYPERCONTEXT Studio" width="100%" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/millymilly29/hypercontext/actions"><img src="https://img.shields.io/badge/tests-16%20passed-00ff9d?style=for-the-badge&logo=vitest&logoColor=black" alt="Tests"></a>
-  <a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/Gemini%202.0%20%2F%201.5%20Pro-2M%20Tokens-1a73e8?style=for-the-badge&logo=google&logoColor=white" alt="Gemini 2M"></a>
-  <a href="https://ai.google.dev/gemini-api/docs/caching"><img src="https://img.shields.io/badge/Google%20Context%20Caching-75%25%20Off-a142f4?style=for-the-badge" alt="Context Caching"></a>
-  <img src="https://img.shields.io/badge/dependencies-0%20(zero--dep)-00f0ff?style=for-the-badge" alt="Zero Dependencies">
-  <img src="https://img.shields.io/badge/license-MIT-white?style=for-the-badge" alt="License">
+  <a href="https://millymilly29.github.io/hypercontext.html"><img src="https://img.shields.io/badge/demo-live%20studio-080806?style=flat-square&labelColor=161616" alt="Live Studio"></a>
+  <a href="https://github.com/millymilly29/hypercontext/actions"><img src="https://img.shields.io/badge/tests-16%20passed-080806?style=flat-square&labelColor=161616" alt="Tests"></a>
+  <a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/model-gemini%202.0%20%2F%201.5%20pro-080806?style=flat-square&labelColor=161616" alt="Gemini 2M"></a>
+  <a href="https://ai.google.dev/gemini-api/docs/caching"><img src="https://img.shields.io/badge/caching-google%20cloud%20(-75%25)-080806?style=flat-square&labelColor=161616" alt="Context Caching"></a>
+  <img src="https://img.shields.io/badge/runtime-zero%20dependencies-080806?style=flat-square&labelColor=161616" alt="Zero Dependencies">
+  <img src="https://img.shields.io/badge/license-MIT-080806?style=flat-square&labelColor=161616" alt="License">
+</p>
+
+<p align="center">
+  <a href="https://millymilly29.github.io/hypercontext.html"><strong>Live Interactive Studio ↗</strong></a> &nbsp;·&nbsp;
+  <a href="https://millymilly29.github.io/portfolio/hypercontext.html">Case Study ↗</a> &nbsp;·&nbsp;
+  <a href="#architecture-pipeline">Architecture</a> &nbsp;·&nbsp;
+  <a href="#empirical-benchmarks-nodejs-v24-apple-silicon">Benchmarks</a> &nbsp;·&nbsp;
+  <a href="#quick-start--verification">Quickstart</a>
 </p>
 
 > **Architectural Code Archaeologist, Context Caching Orchestrator & Cross-Service Blast Radius Analyzer powered by Google Gemini 2.0 / 1.5 Pro.**  
@@ -17,17 +27,17 @@
 
 ---
 
-## ⚡ The Monorepo Dilemma: Why RAG Fails at Scale
+## Problem Space & Motivation: The Limits of Traditional Vector RAG
 
 Traditional Vector RAG systems break repositories into 500-token chunks. When a developer asks:
 > *"Where in this 150,000-line monorepo does an unhandled Promise rejection in the Stripe webhook corrupt the database transaction in the billing worker?"*
 
-Vector search returns 3 isolated code snippets that fail to show the inter-service call hierarchy, missing the fatal bug entirely.
+Vector search returns isolated code snippets that fail to convey cross-module call hierarchies, missing non-local side effects entirely.
 
-### The Gemini 2.0 / 1.5 Breakthrough:
-Google Gemini features a massive **2,000,000-token native context window**, allowing an entire enterprise monorepo to be ingested at once with **zero chunking loss**.
+### The Gemini 2.0 / 1.5 Long-Context Capability
+Google Gemini features a native **2,000,000-token context window**, allowing an entire enterprise monorepo to be ingested at once with **zero chunking loss**.
 
-However, repeatedly sending 1.5M tokens per query costs **\$0.225+ per question** and incurs **15+ seconds of latency**.
+However, repeatedly sending 1.5M tokens per query incurs costs of **\$0.225+ per request** and **15+ seconds of latency**.
 
 **`HYPERCONTEXT`** solves this via **Gemini Context Caching**:
 1. **Persistent AST Hashing:** Computes SHA-256 fingerprint of the codebase and registers a persistent context cache on Google Cloud infrastructure (`cachedContents.create`).
@@ -37,7 +47,7 @@ However, repeatedly sending 1.5M tokens per query costs **\$0.225+ per question*
 
 ---
 
-## 🏗️ Architecture Pipeline
+## Architecture Pipeline
 
 ```
       [ Entire Monorepo / Microservices ] (TypeScript, Python, Go, SQL, Configs)
@@ -61,7 +71,7 @@ However, repeatedly sending 1.5M tokens per query costs **\$0.225+ per question*
 
 ---
 
-## 📊 Empirical Benchmarks (Node.js v24, Apple Silicon)
+## Empirical Benchmarks (Node.js v24, Apple Silicon)
 
 | Metric | HYPERCONTEXT + Gemini Cache | Uncached Gemini 2.0 | Traditional Vector RAG |
 | :--- | :---: | :---: | :---: |
@@ -74,9 +84,9 @@ However, repeatedly sending 1.5M tokens per query costs **\$0.225+ per question*
 
 ---
 
-## 🚀 Quick Start
+## Quick Start & Verification
 
-### 1. Clone & Run Demo (Zero Setup Required)
+### 1. Clone & Run Test Suite (Zero Dependencies Required)
 
 ```bash
 git clone https://github.com/millymilly29/hypercontext.git
@@ -98,7 +108,7 @@ Open `index.html` directly in any web browser (no local server or build step nee
 
 ---
 
-## 💻 CLI Commands
+## CLI Commands
 
 ```bash
 # Ingest and pack a local repository directory into a Gemini 2M XML payload
@@ -113,7 +123,7 @@ node cli.js --help
 
 ---
 
-## 🔌 Programmatic API
+## Programmatic API
 
 ```javascript
 const { RepoPacker, GeminiClient, BlastRadiusAnalyzer } = require('./engine/index');
@@ -139,9 +149,9 @@ console.log(`Risk Score: ${radius.riskScore}/100 | Exposed routes: ${radius.affe
 
 ---
 
-## 🔑 Live Gemini API Mode vs Offline Emulation
+## Live API Mode vs Deterministic Emulation
 
-- **Zero-Config Offline Mode:** Without an API key, `HYPERCONTEXT` runs in deterministic high-fidelity emulation mode for instant testing, CI pipelines, and portfolio demonstrations.
+- **Zero-Config Offline Mode:** Without an API key, `HYPERCONTEXT` runs in deterministic high-fidelity emulation mode for instant testing, CI pipelines, and demonstrations.
 - **Live Google Cloud Mode:** Provide `GEMINI_API_KEY`:
   ```bash
   export GEMINI_API_KEY="your-gemini-api-key"
@@ -150,6 +160,6 @@ console.log(`Risk Score: ${radius.riskScore}/100 | Exposed routes: ${radius.affe
 
 ---
 
-## 📄 License
+## License
 
 MIT © [Kirill Tsyganov](mailto:millyrock2900@gmail.com)
