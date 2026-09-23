@@ -1,0 +1,38 @@
+{
+  "name": "hypercontext",
+  "version": "1.0.0",
+  "description": "2,000,000-Token Monorepo Intelligence, Context Caching Engine & Cross-Service Blast Radius Analyzer powered by Gemini 2.0 / 1.5 Pro",
+  "main": "engine/index.js",
+  "bin": {
+    "hypercontext": "./cli.js"
+  },
+  "scripts": {
+    "test": "node tests/hypercontext.test.js",
+    "demo": "node cli.js demo",
+    "pack": "node cli.js pack"
+  },
+  "keywords": [
+    "gemini",
+    "gemini-api",
+    "context-caching",
+    "monorepo",
+    "code-archaeology",
+    "ast",
+    "blast-radius",
+    "ai-agents",
+    "zero-dependency"
+  ],
+  "author": "Kirill Tsyganov <millyrock2900@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/millymilly29/hypercontext.git"
+  },
+  "bugs": {
+    "url": "https://github.com/millymilly29/hypercontext/issues"
+  },
+  "homepage": "https://github.com/millymilly29/hypercontext#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
